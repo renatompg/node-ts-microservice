@@ -1,12 +1,12 @@
-# Node.js
+# Node.js dependencies
 node_modules/
 
 # Logs
 *.log
 
-# Diretórios de build
+# Build directories
 build/
 
-# Arquivos de dependências do gerenciador de pacotes
+# Package manager dependency files
 package-lock.json
 yarn.lock

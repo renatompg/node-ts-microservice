@@ -8,7 +8,6 @@ import swaggerJSDoc from 'swagger-jsdoc';
 const app = express();
 app.use(express.json());
 
-// Initializing Redis and Postgres
 initRedis();
 initPostgres();
 
@@ -29,13 +28,12 @@ const swaggerDefinition = {
 
 const options = {
   definition: swaggerDefinition,
-  apis: ['./src/controllers/*.ts'], // Ensure the path is correct
+  apis: ['./src/controllers/*.ts'], 
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
 app.post('/create/:status', createRequest);
 app.get('/stats/status', getStats);
 

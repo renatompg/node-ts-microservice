@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 initRedis();
 initPostgres();
-//Swagger
+// Swagger Configuration
 const swaggerDefinition = {
     openapi: '3.0.0',
     info: {
@@ -24,12 +24,12 @@ const swaggerDefinition = {
 };
 const options = {
     definition: swaggerDefinition,
-    apis: ['./src/controllers/*.ts'], 
+    apis: ['./src/controllers/*.ts'],
 };
 const swaggerSpec = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.post('/create/:status', createRequest);
 app.get('/stats/status', getStats);
 app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+    console.log('Server running on port 3000');
 });

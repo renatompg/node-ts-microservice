@@ -10,11 +10,11 @@ const pgClient = new Client({
 export const initPostgres = async () => {
     try {
         await pgClient.connect();
-        console.log('Conexão com PostgreSQL bem-sucedida');
+        console.log('Successfully connected to PostgreSQL');
     }
     catch (err) {
-        console.error('Erro ao conectar ao PostgreSQL:', err);
-        process.exit(1); // Encerra o processo se a conexão falhar
+        console.error('Error connecting to PostgreSQL:', err);
+        process.exit(1);
     }
 };
 export default pgClient;

@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import redisClient from '../../database/redis';
 import { createRequest, getStats } from '../requestController';
 
-// Mocks for redisClient and flushCacheToDatabase
 jest.mock('../../database/redis', () => ({
   incr: jest.fn(),
   rPush: jest.fn(),
@@ -11,7 +10,6 @@ jest.mock('../../database/redis', () => ({
 }));
 jest.mock('../../services/cacheService');
 
-// Test for createRequest function
 it('should respond with status 200 for a successful request', async () => {
   const req: Partial<Request> & { params: { status: string } } = {
     params: { status: 'success' },
@@ -46,7 +44,6 @@ it('should respond with status 400 for an invalid status', async () => {
   expect(res.json).toHaveBeenCalledWith({ error: 'Invalid status' });
 });
 
-// Test for getStats function
 it('should return statistics with status 200', async () => {
   const req: Partial<Request> & { params: { status: string } } = {
     params: { status: 'success' },
