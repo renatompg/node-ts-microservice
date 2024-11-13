@@ -52,7 +52,7 @@ This microservice is built using Node.js and TypeScript to log incoming requests
      ```
 
    - This will start the following services:
-     - **Microservice**: Node.js app running on port 3000.
+     - **Microservice**: Node.js app running on port 3001.
      - **Redis**: For caching request logs.
      - **PostgreSQL**: For persistent storage of request details.
 
@@ -90,7 +90,7 @@ The API is documented using Swagger for easy integration and testing. Access it 
 Running the Application Locally
 Make sure Docker is running on your system.
 Use Docker Compose to start the services.
-Access the application on http://localhost:3000.
+Access the application on http://localhost:3001.
 License
 This project is licensed under the MIT License.
 
