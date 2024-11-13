@@ -85,7 +85,8 @@ pgClient: Connects to PostgreSQL and inserts request details into a table (reque
 flushCacheToDatabase: Flushed cached request data to PostgreSQL in batches of 5.
 
 5. **Swagger Documentation:**
-The API is documented using Swagger for easy integration and testing. Access it at /api-docs endpoint after running the microservice.
+The API is documented using Swagger for easy integration and testing. 
+Access it at http://localhost:3001/api-docs endpoint after running the microservice.
 
 Running the Application Locally
 Make sure Docker is running on your system.
