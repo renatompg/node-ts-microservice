@@ -56,7 +56,16 @@ This microservice is built using Node.js and TypeScript to log incoming requests
      - **Redis**: For caching request logs.
      - **PostgreSQL**: For persistent storage of request details.
 
-4. **Access the Swagger API Documentation:**
+4. **PostgreSQL Access Credentials:**
+   When running the services with Docker Compose, the PostgreSQL database will be configured with the following credentials:
+
+   - **Username**: `user`
+   - **Password**: `password`
+   - **Database**: `microservice`
+
+   You can use these credentials to connect to PostgreSQL either from within the Docker container or externally.
+
+5. **Access the Swagger API Documentation:**
 
    Once the application is running, you can access the API documentation at:
 
