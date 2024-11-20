@@ -1,5 +1,10 @@
-import redisClient from '../../database/redis';
-import { createRequest, getStats } from '../requestController';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const redis_1 = __importDefault(require("../../database/redis"));
+const request_controller_1 = require("../request-controller");
 jest.mock('../../database/redis', () => ({
     incr: jest.fn(),
     rPush: jest.fn(),
@@ -16,9 +21,9 @@ it('should respond with status 200 for a successful request', async () => {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
     };
-    await createRequest(req, res);
-    expect(redisClient.incr).toHaveBeenCalledWith('totalCalls');
-    expect(redisClient.rPush).toHaveBeenCalled();
+    await (0, request_controller_1.createRequest)(req, res);
+    expect(redis_1.default.incr).toHaveBeenCalledWith('totalCalls');
+    expect(redis_1.default.rPush).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Request processed', status: 'success' });
 });
@@ -31,7 +36,7 @@ it('should respond with status 400 for an invalid status', async () => {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
     };
-    await createRequest(req, res);
+    await (0, request_controller_1.createRequest)(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: 'Invalid status' });
 });
@@ -44,10 +49,10 @@ it('should return statistics with status 200', async () => {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
     };
-    redisClient.get.mockResolvedValueOnce('10')
+    redis_1.default.get.mockResolvedValueOnce('10')
         .mockResolvedValueOnce('5')
         .mockResolvedValueOnce('5');
-    await getStats(req, res);
+    await (0, request_controller_1.getStatsRequest)(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
         totalCalls: 10,

@@ -1,8 +1,11 @@
-import { createClient } from 'redis';
-const redisClient = createClient({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.initRedis = void 0;
+const redis_1 = require("redis");
+const redisClient = (0, redis_1.createClient)({
     url: 'redis://redis:6379',
 });
-export const initRedis = async () => {
+const initRedis = async () => {
     try {
         await redisClient.connect();
         console.log('Successfully connected to Redis');
@@ -12,4 +15,5 @@ export const initRedis = async () => {
         process.exit(1); // Exits the process if the connection fails
     }
 };
-export default redisClient;
+exports.initRedis = initRedis;
+exports.default = redisClient;

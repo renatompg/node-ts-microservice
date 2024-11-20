@@ -1,9 +1,5 @@
 import { Request, Response } from 'express';
-import redisClient from '../database/redis';
-import { flushCacheToDatabase } from '../services/cacheService';
-
-const CACHE_KEY = 'request_logs';
-const BATCH_SIZE = 5;
+import { StatsService } from '../services/stats-service';
 
 /**
  * @swagger
@@ -29,35 +25,13 @@ const BATCH_SIZE = 5;
  */
 export const createRequest = async (req: Request, res: Response) => {
   const { status } = req.params;
-  const startTime = new Date();
 
   if (status !== 'success' && status !== 'failure') {
     return res.status(400).json({ error: 'Invalid status' });
   }
 
   try {
-    await redisClient.incr('totalCalls');
-    if (status === 'success') {
-      await redisClient.incr('totalSuccess');
-    } else {
-      await redisClient.incr('totalFailure');
-    }
-
-    const requestDetails = {
-      path: req.path,
-      startTime,
-      finishTime: new Date(),
-      result: status,
-    };
-
-    await redisClient.rPush(CACHE_KEY, JSON.stringify(requestDetails));
-
-    const cacheLength = await redisClient.lLen(CACHE_KEY);
-
-    if (cacheLength > BATCH_SIZE) {
-      await flushCacheToDatabase();
-    }
-
+    await new StatsService().saveStatus(status, req.path);
     res.status(200).json({ message: 'Request processed', status });
   } catch (err) {
     console.error('Error processing request:', err);
@@ -91,16 +65,12 @@ export const createRequest = async (req: Request, res: Response) => {
  *       500:
  *         description: Error retrieving statistics
  */
-export const getStats = async (req: Request, res: Response) => {
+export const getStatsRequest = async (req: Request, res: Response) => {
   try {
-    const totalCalls = await redisClient.get('totalCalls') || '0';
-    const totalSuccess = await redisClient.get('totalSuccess') || '0';
-    const totalFailure = await redisClient.get('totalFailure') || '0';
+    var statsRequest = await new StatsService().getStats();
 
     res.status(200).json({
-      totalCalls: parseInt(totalCalls),
-      totalSuccess: parseInt(totalSuccess),
-      totalFailure: parseInt(totalFailure),
+      statsRequest
     });
   } catch (err) {
     console.error('Error retrieving statistics:', err);

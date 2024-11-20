@@ -1,7 +1,7 @@
-import redisClient from '../database/redis.js';
-import { flushCacheToDatabase } from '../services/cacheService.js';
-const CACHE_KEY = 'request_logs';
-const BATCH_SIZE = 5;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getStatsRequest = exports.createRequest = void 0;
+const stats_service_1 = require("../services/stats-service");
 /**
  * @swagger
  * /create/{status}:
@@ -24,31 +24,13 @@ const BATCH_SIZE = 5;
  *       500:
  *         description: Internal server error
  */
-export const createRequest = async (req, res) => {
+const createRequest = async (req, res) => {
     const { status } = req.params;
-    const startTime = new Date();
     if (status !== 'success' && status !== 'failure') {
         return res.status(400).json({ error: 'Invalid status' });
     }
     try {
-        await redisClient.incr('totalCalls');
-        if (status === 'success') {
-            await redisClient.incr('totalSuccess');
-        }
-        else {
-            await redisClient.incr('totalFailure');
-        }
-        const requestDetails = {
-            path: req.path,
-            startTime,
-            finishTime: new Date(),
-            result: status,
-        };
-        await redisClient.rPush(CACHE_KEY, JSON.stringify(requestDetails));
-        const cacheLength = await redisClient.lLen(CACHE_KEY);
-        if (cacheLength > BATCH_SIZE) {
-            await flushCacheToDatabase();
-        }
+        await new stats_service_1.StatsService().saveStatus(status, req.path);
         res.status(200).json({ message: 'Request processed', status });
     }
     catch (err) {
@@ -56,6 +38,7 @@ export const createRequest = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+exports.createRequest = createRequest;
 /**
  * @swagger
  * /stats/status:
@@ -82,15 +65,11 @@ export const createRequest = async (req, res) => {
  *       500:
  *         description: Error retrieving statistics
  */
-export const getStats = async (req, res) => {
+const getStatsRequest = async (req, res) => {
     try {
-        const totalCalls = await redisClient.get('totalCalls') || '0';
-        const totalSuccess = await redisClient.get('totalSuccess') || '0';
-        const totalFailure = await redisClient.get('totalFailure') || '0';
+        var statsRequest = await new stats_service_1.StatsService().getStats();
         res.status(200).json({
-            totalCalls: parseInt(totalCalls),
-            totalSuccess: parseInt(totalSuccess),
-            totalFailure: parseInt(totalFailure),
+            statsRequest
         });
     }
     catch (err) {
@@ -98,3 +77,4 @@ export const getStats = async (req, res) => {
         res.status(500).json({ error: 'Error retrieving statistics' });
     }
 };
+exports.getStatsRequest = getStatsRequest;

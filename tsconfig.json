@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ES2017",
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "allowJs": true,
-    "checkJs": false,
-    "baseUrl": "./src",
+    "module": "commonjs",               // Alterado de "ESNext" para "commonjs" para compatibilidade com Node.js
+    "target": "ES2017",                 // Alvo do código compilado
+    "moduleResolution": "node",         // Resolução de módulos no estilo Node.js
+    "outDir": "./dist",                 // Diretório de saída dos arquivos compilados
+    "rootDir": "./src",                 // Diretório raiz dos arquivos de código fonte
+    "esModuleInterop": true,            // Habilita a interoperabilidade de módulos
+    "resolveJsonModule": true,          // Permite a importação de arquivos JSON
+    "skipLibCheck": true,               // Ignora verificação de tipos nas bibliotecas
+    "strict": true,                     // Ativa o modo estrito de verificação de tipos
+    "allowJs": true,                    // Permite a compilação de arquivos .js também
+    "checkJs": false,                   // Desativa a verificação de tipos para arquivos .js
+    "baseUrl": "./src",                 // Diretório base para resolução de módulos
     "paths": {
       "*": [
         "node_modules/*",
@@ -20,9 +20,9 @@
     }
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts"                       // Inclui todos os arquivos TypeScript da pasta src
   ],
   "exclude": [
-    "node_modules"
+    "node_modules"                      // Exclui a pasta node_modules
   ]
 }

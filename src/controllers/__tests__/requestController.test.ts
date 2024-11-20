@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import redisClient from '../../database/redis';
-import { createRequest, getStats } from '../requestController';
+import { createRequest, getStatsRequest } from '../request-controller';
 
 jest.mock('../../database/redis', () => ({
   incr: jest.fn(),
@@ -58,7 +58,7 @@ it('should return statistics with status 200', async () => {
     .mockResolvedValueOnce('5')
     .mockResolvedValueOnce('5');
 
-  await getStats(req as Request, res as Response);
+  await getStatsRequest(req as Request, res as Response);
 
   expect(res.status).toHaveBeenCalledWith(200);
   expect(res.json).toHaveBeenCalledWith({
